@@ -1,0 +1,11 @@
+http://localhost.localdomain/ameblo.jp/
+http://localhost.localdomain/www.statefarm.com/
+http://localhost.localdomain/www.walmart.com/
+http://localhost.localdomain/www.ebay.com/
+http://localhost.localdomain/www.rakuten.com.tw
+http://localhost.localdomain/thinkprogress.org/
+http://localhost.localdomain/www.apple.com/
+http://localhost.localdomain/www.microsoft.com/
+http://localhost.localdomain/www.alexa.com/
+http://localhost.localdomain/townhall.com/
+http://localhost.localdomain/stackoverflow.com/
