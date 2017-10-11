@@ -1,0 +1,32 @@
+--- wpr.go.orig	2017-10-09 20:34:02.511312620 -0400
++++ wpr.go	2017-10-09 20:33:23.336025813 -0400
+@@ -208,8 +208,10 @@
+ 		})
+ }
+ 
+-func getListener(port int) (net.Listener, error) {
+-	addr, err := net.ResolveTCPAddr("tcp", fmt.Sprintf("localhost:%d", port))
++func getListener(host string, port int) (net.Listener, error) {
++	//addr, err := net.ResolveTCPAddr("tcp", fmt.Sprintf("localhost:%d", port))
++	//addr, err := net.ResolveTCPAddr("tcp", fmt.Sprintf("%v:%d",common.host,  port))
++	addr, err := net.ResolveTCPAddr("tcp", fmt.Sprintf("%s:%d", host, port))
+ 	if err != nil {
+ 		return nil, err
+ 	}
+@@ -280,14 +282,14 @@
+ 			var err error
+ 			switch s.Scheme {
+ 			case "http":
+-				ln, err := getListener(s.Port)
++				ln, err := getListener(common.host, s.Port)
+ 				if err != nil {
+ 					break
+ 				}
+ 				logServeStarted(s.Scheme, ln)
+ 				err = s.Serve(tcpKeepAliveListener{ln.(*net.TCPListener)})
+ 			case "https":
+-				ln, err := getListener(s.Port)
++				ln, err := getListener(common.host, s.Port)
+ 				if err != nil {
+ 					break
+ 				}
