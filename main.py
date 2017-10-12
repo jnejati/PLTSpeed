@@ -32,14 +32,14 @@ def main():
                   'upload_loss':'0.0%'}
     start = timeit.default_timer()
     input_file = 'africa.txt'
-    _domains_dir = '/home/jnejati/PLTSpeed/domains_list/'
-    config_file = '/home/jnejati/PLTSpeed/confs/netProfiles.json'
+    _domains_dir = 'domains_list/'
+    config_file = 'confs/netProfiles.json'
     _change_resolv_conf()
     with open(config_file, 'r') as f:
         default_net_profile = json.load(f)[0]
-        _path =  os.path.join('/home/jnejati/PLTSpeed', default_net_profile['device_type'] + '_' + default_net_profile['name'])
+        _path =  os.path.join(default_net_profile['device_type'] + '_' + default_net_profile['name'])
         webDnsSetup.clear_folder(_path)
-    with open('/home/jnejati/PLTSpeed/res/' + input_file) as _sites:
+    with open('res/' + input_file) as _sites:
         for _site in _sites:
             _site = _site.strip()
             logging.info('Navigating to: ' + _site)
@@ -86,7 +86,7 @@ def main():
                 logging.info(_trace_file, _screenshot_file, _summary_file)
                 time.sleep(5)
                 try:
-                    node = '/home/jnejati/.nvm/versions/node/v6.9.5/bin/node'
+                    node = 'nodejs'
                     _node_cmd = [node, 'chrome_launcher.js', _site,  _trace_file, _summary_file, _screenshot_file]
                     _cmd =  _node_cmd
                     subprocess.call(_cmd, timeout = 110)

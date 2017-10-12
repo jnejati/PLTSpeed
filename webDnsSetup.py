@@ -107,23 +107,23 @@ def setup_replay(domain_list):
     os.system('pkill go')
     #subprocess.call(['iptables', '-t', 'nat', '-A', 'OUTPUT', '-p', 'tcp', '--dport', '80' , '-j', 'DNAT', '--to-destination', '127.0.0.1:8080'])
     #subprocess.call(['iptables', '-t', 'nat', '-A', 'OUTPUT', '-p', 'tcp', '--dport', '443' , '-j', 'DNAT', '--to-destination', '127.0.0.1:8081'])
-    with cd('/home/jnejati/go/src/github.com/catapult-project/catapult/web_page_replay_go/'):
+    with cd('../catapult/web_page_replay_go/'):
         for i, domain in enumerate(domain_list):
             netns_b = 'netns-' + str(i + 1)
             #veth_b = 'veth-' + str((i * 2) + 1)
             #subprocess.call(['sysctl', '-w', 'net.ipv4.conf.' + veth_b + '.route_localnet=1'])
             print(domain, netns_b)
             print('Starting Web replay inside: {}: {}'.format(netns_b, domain))
-            _go = '/usr/local/go/bin/go'
-            _src = '/home/jnejati/go/src/github.com/catapult-project/catapult/web_page_replay_go/src/'
-            _cert ='--https_cert_file=/home/jnejati/go/src/github.com/catapult-project/catapult/web_page_replay_go/wpr_cert.pem'
-            _key='--https_key_file=/home/jnejati/go/src/github.com/catapult-project/catapult/web_page_replay_go/wpr_key.pem'
-            _archive = '/home/jnejati/archive.json'
+            _go = 'go'
+            _src = 'src/'
+            _cert ='--https_cert_file=../catapult/web_page_replay_go/wpr_cert.pem'
+            _key='--https_key_file=../catapult/web_page_replay_go/wpr_key.pem'
+            _archive = '~/archive.json'
             _host = '--host=10.10.' + str(i + 1) + '.2'#TODO remove iptables by changing port t default 80 and 443
             _host_ip = '10.10.' + str(i + 1) + '.2'#TODO remove iptables by changing port t default 80 and 443
             _http_port = '--http_port=80'
             _https_port = '--https_port=443'
-            _inject = '--inject_scripts=/home/jnejati/go/src/github.com/catapult-project/catapult/web_page_replay_go/deterministic.js'
+            _inject = '--inject_scripts=../catapult/web_page_replay_go/deterministic.js'
             #subprocess.call(['ip', 'netns', 'exec', netns_b,'sysctl',  'net.ipv4.ip_forward=1'])
             #subprocess.call(['ip', 'netns', 'exec', netns_b,'sysctl',  'net.ipv4.ip_forward=1'])
             #subprocess.call(['ip', 'netns', 'exec', netns_b, 'iptables', '-t', 'nat', '-A', 'PREROUTING', '-p', 'tcp', '--dport', '80' , '-j', 'DNAT', '--to-destination', '127.0.0.1:80'])
@@ -145,7 +145,7 @@ def setup_webserver(domain_list, _src):
         servername = domain
         try:
             #create_self_signed_cert('/home/jnejati/PLTSpeed/certs', '/home/jnejati/PLTSpeed/keys', domain)
-            create_self_signed_cert('/home/jnejati/PLTSpeed/certs', domain)
+            create_self_signed_cert('certs', domain)
             print('Seting Web server for ', domain)
             out = """user  nginx;
             worker_processes  1;
@@ -168,8 +168,8 @@ def setup_webserver(domain_list, _src):
                 listen              80;
                 listen              443 ssl;
                 server_name         %s;
-                ssl_certificate     /home/jnejati/PLTSpeed/domains/%s.cert;
-                ssl_certificate_key /home/jnejati/PLTSpeed/domains/%s.key;
+                ssl_certificate     domains/%s.cert;
+                ssl_certificate_key domains/%s.key;
                 access_log  /var/log/nginx/%s.access.log  main;
                 location / {
                     root   /var/www/%s;
@@ -213,11 +213,11 @@ def setup_webserver(domain_list, _src):
         target.write(out)
         target.close()
         print('Start Web server inside: {}: {}'.format(netns_b, domain))
-        subprocess.call(['ip', 'netns', 'exec', netns_b, '/usr/sbin/nginx', '-c', '/home/jnejati/PLTSpeed/conf/%s.conf' % servername])
+        subprocess.call(['ip', 'netns', 'exec', netns_b, '/usr/sbin/nginx', '-c', 'conf/%s.conf' % servername])
         print('Done.')
 
 def ping_delays(domains, net_profile):
-    f = open("/home/jnejati/PLTSpeed/ripe/ping_data", "rb")
+    f = open("ripe/ping_data", "rb")
     #f = open("/home/jnejati/PLTSpeed/ripe/us_ping_data_22778", "rb")
     netp = {}
     try:
@@ -247,7 +247,7 @@ def ping_delays(domains, net_profile):
     return netp
 
 def populate_zone_file(_d_ip_dict):
-    _dest = '/home/jnejati/PLTSpeed/zones/zones.txt'
+    _dest = 'zones/zones.txt'
     zone_f = open(_dest, 'w')
     for _domain, sd_ip in _d_ip_dict.items():
        zone_f.write(_domain + '\t' + 'SOA\t' + 'ns1.' + _domain + '\n')
@@ -276,7 +276,7 @@ def extract_domains(domains):
     return _d_ip_dict 
  
 def setup_dns(domains):
-    domains_dump_file = '/home/jnejati/PLTSpeed/zones/domains.pickle'
+    domains_dump_file = 'zones/domains.pickle'
     _d_ip_dict = extract_domains(domains)
     #print(_d_ip_dict)
     populate_zone_file(_d_ip_dict) 
