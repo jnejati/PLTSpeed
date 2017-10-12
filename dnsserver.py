@@ -159,7 +159,7 @@ def handle_sig(signum, frame):
 def dns_delay(domains):
     _probeId = 15397 #ZA
     #_probeId = 22778 #US
-    _file = open('/home/jnejati/PLTSpeed/ripe/dns_data_1probe', 'rb')
+    _file = open('ripe/dns_data', 'rb')
     #_file = open('/home/jnejati/PLTSpeed/ripe/us_dns_data_22778', 'rb')
     pcl = pickle.Unpickler(_file)
     dns_dict = pcl.load()
@@ -183,7 +183,7 @@ def dns_delay(domains):
 
 if __name__ == '__main__':
     signal.signal(signal.SIGTERM, handle_sig)
-    domains_dump_file = '/home/jnejati/PLTSpeed/zones/domains.pickle'
+    domains_dump_file = 'zones/domains.pickle'
     with open(domains_dump_file, 'rb') as _f:
         pcl = pickle.Unpickler(_f)
         _domains = pcl.load()
@@ -191,7 +191,7 @@ if __name__ == '__main__':
     port = int(os.getenv('PORT', 53))
     address = '127.0.0.1'
     upstream = os.getenv('UPSTREAM', '8.8.8.8')
-    zone_file = Path(os.getenv('ZONE_FILE', '/home/jnejati/PLTSpeed/zones/zones.txt'))
+    zone_file = Path(os.getenv('ZONE_FILE', 'zones/zones.txt'))
     resolver = Resolver(upstream, zone_file, delay_dict)
     udp_server = DNSServer(resolver, address=address,  port=port)
     #tcp_server = DNSServer(resolver, port=port, tcp=True)
