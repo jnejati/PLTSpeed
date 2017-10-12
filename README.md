@@ -51,6 +51,14 @@ The following data files are required:
 Runtime
 -----
 
+#### Chrome
+
+Run chrome with remote debugging port 9222
+
+    google-chrome-stable --remote-debugging-port=9222
+
+#### Main Program
+
     [sudo -E] python3 main.py
 
 Note1: This program will modify your _/etc/resolv.conf_ file. Please make sure you have a backup.
