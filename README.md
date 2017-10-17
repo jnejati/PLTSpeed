@@ -36,7 +36,7 @@ The following directory structure is assumed:
   
 #### Node.Js Modules
 
-    npm install chrome-remote-interface
+    npm install chrome-remote-interface@v0.23.3
     
 Note: ```nodejs``` must be in your $PATH
 
