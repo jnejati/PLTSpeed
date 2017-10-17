@@ -94,7 +94,6 @@ def main():
                     print("Timeout:  ", _site, run_no)
                     with open (os.path.join(_site_data_folder, 'log.txt'), 'w+') as _log:
                         _log.write("Timed out:  " +  _site + ' ' +  str(run_no) + '\n')
-                time.sleep(1000)
             dnsHandler.kill()
             time.sleep(5)
     webDnsSetup.clear_ip_tables()
